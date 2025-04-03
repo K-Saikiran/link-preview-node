@@ -1,0 +1,42 @@
+{
+  "name": "link-preview-node",
+  "description": "A Node.js library for getting link previews",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [
+    "link",
+    "preview",
+    "link-preview",
+    "link-preview-node",
+    "opengraph",
+    "twitter",
+    "youtube"
+  ],
+  "author": "saikiran_k12",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/url-regex-safe": "^1.0.2",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "cheerio": "^1.0.0",
+    "ioredis": "^5.0.0",
+    "node-cache": "^5.1.2",
+    "url-regex-safe": "^4.0.0"
+  },
+  "peerDependencies": {
+    "ioredis": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
+  }
+}
