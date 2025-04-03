@@ -1,5 +1,5 @@
 {
-  "name": "link-preview-node",
+  "name": "link-previu",
   "description": "A Node.js library for getting link previews",
   "version": "1.0.0",
   "main": "./dist/index.js",
@@ -15,9 +15,20 @@
   },
   "keywords": [
     "link",
+    "url",
     "preview",
+    "previu",
+    "url previu",
+    "url-previu",
+    "url-preview",
+    "url preview",
+    "link previu",
+    "link preview",
+    "link-previu",
     "link-preview",
-    "link-preview-node",
+    "node",
+    "ts",
+    "js",
     "opengraph",
     "twitter",
     "youtube"

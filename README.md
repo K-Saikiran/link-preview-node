@@ -1,4 +1,4 @@
-# link-preview-node 🔗
+# link-previu 🔗
 
 A powerful and flexible Node.js library for generating rich link previews with support for OpenGraph, Twitter Cards, and custom HTML parsing. Features built-in caching support with both in-memory and Redis options.
 
@@ -15,16 +15,16 @@ A powerful and flexible Node.js library for generating rich link previews with s
 ## 📦 Installation
 
 ```bash
-npm install link-preview-node
+npm install link-previu
 
 # If you want to use Redis caching
-npm install link-preview-node ioredis
+npm install link-previu ioredis
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import LinkPreview from 'link-preview-node';
+import LinkPreview from 'link-previu';
 
 // Basic usage
 const linkPreview = new LinkPreview()
@@ -63,7 +63,7 @@ interface LinkPreviewOptions {
 ## 🔄 Caching
 
 ### In-Memory Cache
-By default, link-preview-node uses in-memory caching:
+By default, link-previu uses in-memory caching:
 
 ```typescript
 const linkPreview = new LinkPreview({
@@ -78,7 +78,7 @@ For distributed systems, you can use Redis caching:
 
 ```typescript
 import Redis from 'ioredis';
-import { getLinkPreview } from 'link-preview-node';
+import { getLinkPreview } from 'link-previu';
 
 const redis = new Redis({
   host: 'localhost',
@@ -113,7 +113,7 @@ const preview = await linkPreview.getLinkPreview('https://github.com');
 The package includes TypeScript definitions out of the box:
 
 ```typescript
-import { getLinkPreview, LinkPreview, LinkPreviewOptions } from 'link-preview-node';
+import { getLinkPreview, LinkPreview, LinkPreviewOptions } from 'link-previu';
 
 const options: LinkPreviewOptions = {
   timeout: 5000,
@@ -126,6 +126,6 @@ const preview: LinkPreview = await linkPreview.getLinkPreview('https://github.co
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/K-Saikiran/link-preview-node/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/K-Saikiran/link-previu/issues).
 
 Made with ❤️ by [saikiran_k12](https://github.com/K-Saikiran)
