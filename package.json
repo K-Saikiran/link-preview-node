@@ -5,6 +5,11 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/K-Saikiran/link-preview-node.git"
+  },
+  "homepage": "https://github.com/K-Saikiran/link-preview-node#readme",
   "scripts": {
     "build": "tsup"
   },
