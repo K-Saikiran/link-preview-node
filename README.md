@@ -126,6 +126,6 @@ const preview: LinkPreview = await linkPreview.getLinkPreview('https://github.co
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/link-preview-node/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/K-Saikiran/link-preview-node/issues).
 
-Made with ❤️ by [saikiran_k12](https://github.com/yourusername)
+Made with ❤️ by [saikiran_k12](https://github.com/K-Saikiran)
