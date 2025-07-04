@@ -1,7 +1,11 @@
-import Redis from "ioredis";
+export interface RedisLike {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string, mode?: string, duration?: number): Promise<'OK' | string>;
+  del(key: string): Promise<number>;
+}
 
 export interface LinkPreviewInitOptions {
-  redis?: Redis;
+  redis?: RedisLike;
   cacheMaxAge?: number;
   requestTimeout?: number;
   maxRedirects?: number;

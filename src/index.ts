@@ -1,10 +1,15 @@
 import axios from "axios";
 import NodeCache from "node-cache";
 import * as cheerio from "cheerio";
-import { Redis } from "ioredis";
-import { LinkPreviewInitOptions } from "./types/init-options.types";
+import { LinkPreviewInitOptions, RedisLike } from "./types/init-options.types";
 import { LinkPreviewData } from "./types/link-preview.types";
-import { getVideoIdFromYoutubeUrl, hasAllMetadata, isValidUrl } from "./helpers";
+import {
+  getVideoIdFromYoutubeUrl,
+  hasAllMetadata,
+  isValidRedisClient,
+  isValidUrl,
+  testRedisConnection,
+} from "./helpers";
 import { HtmlParser } from "./parsers/html.parser";
 import { JsonLdParser } from "./parsers/json-ld.parser";
 import { OpenGraphParser } from "./parsers/open-graph.parser";
@@ -17,8 +22,8 @@ import { YoutubeParser } from "./parsers/youtube.parser";
  * with support for both Redis and in-memory caching.
  */
 class LinkPreview {
-  private readonly redis?: Redis;
-  private readonly nodeCache?: NodeCache;
+  private redis?: RedisLike;
+  private nodeCache?: NodeCache;
   private readonly cacheMaxAge: number;
   private readonly cacheEnabled: boolean;
   private readonly requestTimeout: number;
@@ -26,6 +31,9 @@ class LinkPreview {
   private readonly httpHeaders?: Record<string, string> = {
     "User-Agent": "WhatsApp/2.23.4.79 A", // default option
   };
+  private redisHealthy: boolean = false;
+  private lastHealthCheck: number = 0;
+  private readonly HEALTH_CHECK_INTERVAL = 30000; // 30 seconds
 
   /**
    * Creates a new LinkPreview instance
@@ -43,8 +51,7 @@ class LinkPreview {
 
     // Initialize caching if enabled
     if (this.cacheEnabled) {
-      this.redis = options.redis;
-      this.nodeCache = options.redis ? undefined : new NodeCache();
+      this.initializeCache(options.redis)
     }
   }
 
@@ -99,9 +106,18 @@ class LinkPreview {
 
     if (this.cacheEnabled) {
       if (this.redis) {
-        await this.redis.set(cacheKey, JSON.stringify(metadata), 'EX', this.cacheMaxAge);
+        await this.redis.set(
+          cacheKey,
+          JSON.stringify(metadata),
+          "EX",
+          this.cacheMaxAge
+        );
       } else {
-        this.nodeCache?.set<LinkPreviewData>(cacheKey, metadata, this.cacheMaxAge);
+        this.nodeCache?.set<LinkPreviewData>(
+          cacheKey,
+          metadata,
+          this.cacheMaxAge
+        );
       }
     }
 
@@ -191,6 +207,62 @@ class LinkPreview {
   private async getYoutubeData(videoId: string) {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     return await this.fetchWithRedirects(url);
+  }
+
+  /**
+   * Initializes caching with Redis validation
+   */
+  private async initializeCache(redis?: RedisLike): Promise<void> {
+    if (redis) {
+      try {
+        if (!isValidRedisClient(redis)) {
+          throw new Error(
+            "Invalid Redis client: must implement get(), set(), and del() methods"
+          );
+        }
+
+        this.redisHealthy = await testRedisConnection(redis);
+
+        if (this.redisHealthy) {
+          this.redis = redis;
+          console.log("Redis client initialized successfully");
+        } else {
+          console.warn(
+            "Redis client failed health check, falling back to memory cache"
+          );
+          this.nodeCache = new NodeCache();
+        }
+      } catch (error) {
+        console.error("Redis initialization failed:", error);
+        console.log("Falling back to memory cache");
+        this.nodeCache = new NodeCache();
+      }
+    } else {
+      this.nodeCache = new NodeCache();
+    }
+  }
+
+  private async checkRedisHealth(): Promise<boolean> {
+    const now = Date.now();
+
+    if (now - this.lastHealthCheck < this.HEALTH_CHECK_INTERVAL) {
+      return this.redisHealthy;
+    }
+
+    this.lastHealthCheck = now;
+
+    if (!this.redis) {
+      return false;
+    }
+
+    try {
+      this.redisHealthy = await testRedisConnection(this.redis);
+      return this.redisHealthy;
+    } catch (error) {
+      console.warn("Redis health check failed:", error);
+      this.redisHealthy = false;
+      return false;
+    }
   }
 }
 

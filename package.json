@@ -1,7 +1,7 @@
 {
   "name": "link-previu",
   "description": "A Node.js library for getting link previews",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -37,18 +37,18 @@
   "license": "MIT",
   "devDependencies": {
     "@types/url-regex-safe": "^1.0.2",
+    "ioredis": "^5.0.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {
     "axios": "^1.8.4",
     "cheerio": "^1.0.0",
-    "ioredis": "^5.0.0",
     "node-cache": "^5.1.2",
     "url-regex-safe": "^4.0.0"
   },
   "peerDependencies": {
-    "ioredis": "^5.0.0"
+    "ioredis": ">=4.0.0"
   },
   "peerDependenciesMeta": {
     "ioredis": {
